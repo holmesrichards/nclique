@@ -29,28 +29,32 @@ def clq_find(clq, Ni, words):
         # clq = clique so far
         # Ni = list of indices to check
         # words = graph of words
+
+        # Given a clique, see if it can be extended. If not, and if it
+        # is long enough, store it. If it can, call recursively to
+        # try to extend it more.
         
         # Returns true if clique(s) found
 
         global mxf, Cliques
 
         foundclq = False
-        for j in Ni:
+        for j in Ni: # check each candidate
                 if j <= clq[-1]:
                         continue
-                foundclq = True
-                
-                # the remaining candidates are only the words in the intersection
+                foundclq = True  # clique can be extended by j
+
+                # See if it can be extended further
+                # New list of candidates, only the words in the intersection
                 # of the neighborhood sets of i and j
                 Nij = Ni & words[j][1]
-                foundx = False
-                if len(Nij) >= mxf-len(clq)-1:
-                        foundx = clq_find (clq+[j], Nij, words)
-                if foundx == 0:
-                        clqj = clq+[j]
+                clqj = clq+[j]
+                if len(Nij) < mxf-len(clqj) or \
+                   not clq_find (clqj, Nij, words):
+                        # Can't extend further, so add clqj to list
                         if len(clqj) == mxf:
                                 Cliques.append(clqj)
-                                print (cwords (clqj, words))
+                                # print (cwords (clqj, words))
                         elif len(clqj) > mxf:
                                 Cliques = [clqj]
                                 mxf = len(clqj)
