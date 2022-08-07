@@ -20,6 +20,7 @@ import csv
 from sys import argv
 
 nchar = 5  # letters per word
+ormore = False  # true to graph words of nchar or more characters
 
 def main():
         
@@ -34,16 +35,23 @@ def main():
         filename = argv[1] if len(argv) > 1 else 'words_alpha.txt'
 
         if len(argv) > 2:
-                nchar = int(argv[2])
+                snchar = argv[2]
+                if snchar[-1] == '+':
+                        ormore = True
+                        nchar = int(snchar[:-1])
+                else:
+                        ormore = False
+                        nchar = int(snchar)
                 
         with open(filename) as f:
                 for word in tqdm(f):
                         word = word[:-1]
-                        if len(word) != nchar:
+                        if (not ormore and len(word) != nchar) or \
+                           (ormore and len(word) < nchar):
                                 continue
                         # compute set representation of the word
                         char_set = set(word)
-                        if len(char_set) != nchar:
+                        if len(char_set) != len(word):
                                 continue
                         # append the word, the set of characters in the word, and an empty set
                         # for all the 'neighbors' of the word, which we will compute later
@@ -61,7 +69,7 @@ def main():
                                 neighbors.add(j)
 
         print('--- write to output ---')
-        with open('word_graph_'+str(nchar)+'.csv', 'w', newline='', encoding='utf-8') as f:
+        with open('word_graph_'+snchar+'.csv', 'w', newline='', encoding='utf-8') as f:
                 writer = csv.writer(f, delimiter = '\t')
                 for i in tqdm(range(len(words))):
                         writer.writerow([words[i][0], str(list(sorted(words[i][2])))])

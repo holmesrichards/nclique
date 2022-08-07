@@ -18,7 +18,8 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program; if not, see <http://www.gnu.org/licenses/>.
 
-Following description and quickstart are slightly amended from Paassen's README. For more on my version and results see this [blog post](https://mathematrec.wordpress.com/2022/08/03/can-you-find-m-n-letter-words-with-nxm-unique-letters/).
+Following description and quickstart are slightly amended from Paassen's README.  For more on my version and results see this [blog post](https://mathematrec.wordpress.com/2022/08/03/can-you-find-m-n-letter-words-with-nxm-unique-letters/).
+
 
 ## Description
 
@@ -39,22 +40,33 @@ But Parker gave it a go. And that's something.
 To reproduce my calculation, please execute the following steps:
 
 1. Download the `words_alpha.txt` file from https://github.com/dwyl/english-words (this is the same file that Parker used).
-2. Run the `generate_graph.py` file, adding the path of the words file (defaulting to words_alpha.txt in the current directory) and n (defaulting to 5) as arguments. (should take at most a few minutes for most cases)
-3. Run the `n_clique.py` file, adding n as an argument (defaulting to 5. (should take at most a few hours for most cases)
+2. Run the `generate_graph.py` file, adding the path of the words file (defaulting to words_alpha.txt in the current directory) and n (defaulting to 5) as arguments. (should take at most a few minutes for most cases). Add a + sign after n to use words of n *or more* letters.
+3. Run the `n_clique.py` file, adding n or n+ as an argument (defaulting to 5). Optionally add an argument for the minimum total number of characters in the clique. (should take at most a few hours for most cases)
 
-All m-word groups with distinct letters should then be in the file `cliques_n.csv`.
+All m-word groups with distinct letters should then be in the file `cliques_<args>.csv` where `<args>` reflects the arguments given to `n_clicque.py`.
+
+Examples:
+
+* To find cliques of 5-letter words:
+    * `python3 generate_graph.py ~path/to/words_alpha.txt 5` 
+    * `python3 n_clique.py 5`
+    * Results are in `cliques_5.csv`
+* To find cliques of words with 9 or more letters having a total of 20 or more letters:
+    * `generate_graph.py ~path/to/words_alpha.txt 9+`
+    * `python3 n_clique.py 9+ 20`
+    * Results are in `cliques_9+_20.csv`
 
 ## Some results
 
-| Length of words | Maximal clique size | Number of cliques found | Note |
-|----|----|----|----|
-| 4 | 6 | bazillions | long run time and not very interesting|
-| 5 | 5 | 831 ||
-| 6 | 4 | 5 ||
-| 7 | 3 | 1877 ||
-| 8 | 2 | 53,013 | no 3-cliques found |
-| 9 | 2 | 798 | |
-| 10 | 2 | 1 |  'blacksmith gunpowdery' |
-| 11 | 2 | 0 ||
-| 12 | 2 | 0 ||
-
+| Length of words | Minimal number of characters | Maximal clique size| Number of cliques found | Note |
+|-----|----|--|----|------|
+| 4   |-| 6 | bazillions  | long run time and not very interesting|
+| 5   |-| 5 | 831  | |
+| 6   |-| 4 | 5  |   |
+| 7   |-| 3 | 1877 | |
+| 8   |-| 2 | 53,013 | no 3-cliques found    |
+| 9   |-| 2 | 798  | |
+| 10|-| 2 | 1    |  'blacksmith gunpowdery'  |
+| 11|-| 2 | 0    |   |
+| 12|-| 2 | 0    |   |
+| 9 | 20 | 2 | 2 | 'blacksmith gunpowdery' and  'showjumping veldcraft'|

@@ -21,6 +21,7 @@ from sys import argv
 
 mxf = 0 # mxf = max clique length found so far
 Cliques = []
+nctotmin = 0 # minimum total letters
 
 def cwords (cliq, words):
         return [words[i][0] for i in cliq]
@@ -52,6 +53,9 @@ def clq_find(clq, Ni, words):
                 if len(Nij) < mxf-len(clqj) or \
                    not clq_find (clqj, Nij, words):
                         # Can't extend further, so add clqj to list
+                        if nctotmin > 0: # reject if too short
+                                if sum([len(words[i][0]) for i in clqj]) < nctotmin:
+                                        continue
                         if len(clqj) == mxf:
                                 Cliques.append(clqj)
                                 # print (cwords (clqj, words))
@@ -64,10 +68,16 @@ def clq_find(clq, Ni, words):
 
 def main():
 
+        global nctotmin
+        
         if len(argv) < 2:
                 nchar = '5'
         else:
                 nchar = argv[1]
+        if len(argv) < 3:
+                nctotmin = 0
+        else:
+                nctotmin = int(argv[2])
 
         # Here, now, begins the daunting task of finding maximal cliques in the graph we
         # prepared via 'generate_graph.py'.
@@ -97,7 +107,8 @@ def main():
         print('completed! Found %d cliques' % len(Cliques))
 
         print('--- write to output ---')
-        with open('cliques_'+nchar+'.csv', 'w', newline='', encoding='utf-8') as f:
+        ofname = 'cliques_'+nchar+'.csv' if nctotmin == 0 else 'cliques_'+nchar+'_'+str(nctotmin)+'.csv'
+        with open(ofname, 'w', newline='', encoding='utf-8') as f:
                 writer = csv.writer(f, delimiter = '\t')
                 for cliq in Cliques:
                         # get word representation of cliques and write to output
