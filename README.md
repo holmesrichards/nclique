@@ -18,7 +18,7 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program; if not, see <http://www.gnu.org/licenses/>.
 
-Following description and quickstart are slightly amended from Paassen's README.
+Following description and quickstart are slightly amended from Paassen's README. For more on my version and results see this [blog post](https://mathematrec.wordpress.com/2022/08/03/can-you-find-m-n-letter-words-with-nxm-unique-letters/).
 
 ## Description
 
